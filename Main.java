@@ -11,12 +11,13 @@ public class Main {
     // Создаем экземпляр класса Scanner
     static Scanner in = new Scanner(System.in);
     
-    // Функция для очистки консоли. Нужна для красоты)
+    // Функция для очистки консоли.
     public static void clear_console() throws IOException, InterruptedException {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
 
-    // Пытаемся открыть файл "todolist.txt" в, котором хранится список дел. Возвращаем список  
+    // Функция читает файл "todolist.txt" и возвращает список дел.
+    // Если файла нет возвращаем пустой список. 
     public static List<String> load_todo_list() {
         try (Scanner scanner = new Scanner(new File("todolist.txt"))) {
             while (scanner.hasNextLine()) {
@@ -27,18 +28,18 @@ public class Main {
             return todoList;
         }
     }
-
+    
+    // Записываем список в файл с переводом строк. 
     public static void save_list_file(List<String> todo_list) throws IOException {
-        System.out.println("save_list_file");
-
         FileWriter writer = new FileWriter("todolist.txt");
+        
         for(String todoItem: todo_list) {
             writer.write(todoItem + System.lineSeparator());
         }
         writer.close();
     }
 
-
+    // Функция красиво выводит список дел. Если список пустой печатаем "Nothing to do".
     public static void show_todo_list(List<String> todo_list) {
         if (todo_list.isEmpty()) {
             System.out.println("Nothing to do");
@@ -51,13 +52,17 @@ public class Main {
         }
     }
 
+    // Добавляет задачу, которую вводит пользователь, в список дел. 
     public static void add_todo_item(List<String> todo_list) {
         System.out.print("Task text: ");
         todo_list.add(in.nextLine());
     }
 
+    // Удаление элемента из списка. Сначала выводим список. Спрашиваем какой элемент удалить. 
+    // Удаляем по индексу. Если такого индекса нет выводим "You named a non-existent case".
     public static void removing_from_list(List<String> todo_list) {
         show_todo_list(todo_list);
+        
         System.out.print("\nWhat would you like to delete? ");
         int item_number = in.nextInt();
 
@@ -68,6 +73,8 @@ public class Main {
         }
     }
 
+    // функция изменяет элемент списка дел. Спрашиваем какой элемент изменить.
+    // Пользователь вводит изменненую задачу. Изменяем элемент по индексу. Если такого индекса нет выводим "You named a non-existent case".
     public static void changing_element(List<String> todo_list) {
         show_todo_list(todo_list);
 
@@ -83,9 +90,10 @@ public class Main {
         }
     }
 
+    // Вывод меню для управления кодом. Выводим список функций. Пользователь выбирает. Очищаем консоль.
+    // С помощью оператора switch запускаем нужнуюю пользователю функцию.
+    // Если он выбрал не существующую функцию то выводим "Command not found!".
     public static void show_menu(List<String> todo_list) throws IOException, InterruptedException {
-        Scanner in = new Scanner(System.in);
-
         System.out.print("-----------------------------------");
         System.out.println("\n1. Show\n2. Add\n3. Delete\n4. Edit\n5. Exit");
 
@@ -106,6 +114,8 @@ public class Main {
         }
     }
 
+    // Запускаем код. Достаем список из файла(подробнее смотрите функцию load_todo_list)
+    // Запускаем бессконечный цикл в котором запускаем функцию show_menu.
     public static void main(String[] args) throws IOException, InterruptedException {
         List<String> todo_list = load_todo_list();
 
