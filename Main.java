@@ -6,13 +6,17 @@ import java.util.ListIterator;
 import java.util.Scanner;
 
 public class Main {
+    // Список для хранения дел
     static List<String> todoList = new ArrayList<>();
+    // Создаем экземпляр класса Scanner
     static Scanner in = new Scanner(System.in);
-
+    
+    // Функция для очистки консоли. Нужна для красоты)
     public static void clear_console() throws IOException, InterruptedException {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
 
+    // Пытаемся открыть файл "todolist.txt" в, котором хранится список дел. Возвращаем список  
     public static List<String> load_todo_list() {
         try (Scanner scanner = new Scanner(new File("todolist.txt"))) {
             while (scanner.hasNextLine()) {
@@ -22,6 +26,16 @@ public class Main {
         } catch (FileNotFoundException e) {
             return todoList;
         }
+    }
+
+    public static void save_list_file(List<String> todo_list) throws IOException {
+        System.out.println("save_list_file");
+
+        FileWriter writer = new FileWriter("todolist.txt");
+        for(String todoItem: todo_list) {
+            writer.write(todoItem + System.lineSeparator());
+        }
+        writer.close();
     }
 
 
@@ -67,16 +81,6 @@ public class Main {
         } else {
             System.out.print("You named a non-existent case");
         }
-    }
-
-    public static void save_list_file(List<String> todo_list) throws IOException {
-        System.out.println("save_list_file");
-
-        FileWriter writer = new FileWriter("todolist.txt");
-        for(String todoItem: todo_list) {
-            writer.write(todoItem + System.lineSeparator());
-        }
-        writer.close();
     }
 
     public static void show_menu(List<String> todo_list) throws IOException, InterruptedException {
